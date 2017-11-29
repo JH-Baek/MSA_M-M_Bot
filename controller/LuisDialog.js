@@ -20,7 +20,6 @@ exports.startDialog = function (bot) {
             new builder.HeroCard(session)
                 .title("Please, choose an option.")
                 .subtitle("You may either click an option or type an option.")
-                .text("Price is $25 and carried in sizes (S, M, L, and XL)")
                 .images([builder.CardImage.create(session, 'http://armdj.com/wp-content/uploads/2015/01/TMMN__HD_ROKU_APP_LOGO.jpg')])
                 .buttons([
                     builder.CardAction.imBack(session, "Movie", "Movie"),
@@ -39,7 +38,6 @@ exports.startDialog = function (bot) {
             new builder.HeroCard(session)
                 .title("Please, choose an option to search a movie.")
                 .subtitle("You may either click an option or type an option.")
-                .text("Price is $25 and carried in sizes (S, M, L, and XL)")
                 .images([builder.CardImage.create(session, 'http://armdj.com/wp-content/uploads/2015/01/TMMN__HD_ROKU_APP_LOGO.jpg')])
                 .buttons([
                     builder.CardAction.imBack(session, "Movie Poster", "Movie Poster"),
@@ -99,7 +97,6 @@ exports.startDialog = function (bot) {
             new builder.HeroCard(session)
                 .title("Please, choose an option.")
                 .subtitle("You may either click an option or type an option.")
-                .text("Price is $25 and carried in sizes (S, M, L, and XL)")
                 .images([builder.CardImage.create(session, 'http://armdj.com/wp-content/uploads/2015/01/TMMN__HD_ROKU_APP_LOGO.jpg')])
                 .buttons([
                     builder.CardAction.imBack(session, "Album", "Album"),
