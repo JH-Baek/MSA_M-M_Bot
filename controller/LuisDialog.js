@@ -4,6 +4,7 @@ var musicAlbum = require('./MusicAlbumCard');
 var musicTrack = require('./MusicTrackCard');
 var musicArtist = require('./MusicArtistCard');
 var movieTitleCard = require('./MovieTitleCard');
+var movie = require('./FavouriteMovie');
 
 exports.startDialog = function (bot) {
     
@@ -156,5 +157,95 @@ exports.startDialog = function (bot) {
         }
     ]).triggerAction({
         matches: 'FindTrack'
+    });
+
+    bot.dialog('DeleteFavouriteMovie', [
+        function (session, args, next) {
+            session.dialogData.args = args || {};
+            if (!session.conversationData["username"]) {
+                builder.Prompts.text(session, "Enter a username to setup your account.");
+            } else {
+                next(); // Skip if we already have this info.
+            }
+        },
+        function (session, results,next) {
+            
+                if (results.response) {
+                    session.conversationData["username"] = results.response;
+                }
+
+                session.send("You want to delete one of your favourite Movies.");
+
+                // Pulls out the food entity from the session if it exists
+                var movieEntity = builder.EntityRecognizer.findEntity(session.dialogData.args.intent.entities, 'movie');
+
+                // Checks if the for entity was found
+                if (movieEntity) {
+                    session.send('Deleting \'%s\'...', movieEntity.entity);
+                    movie.deleteFavouriteMovie(session,session.conversationData['username'],movieEntity.entity); //<--- CALLL WE WANT
+                } else {
+                    session.send("No movie identified! Please try again");
+                }
+            
+        }
+    ]).triggerAction({
+        matches: 'DeleteFavouriteMovie'
+
+    });
+
+    bot.dialog('GetFavouriteMovie', [
+        function (session, args, next) {
+            session.dialogData.args = args || {};        
+            if (!session.conversationData["username"]) {
+                builder.Prompts.text(session, "Enter a username to setup your account.");                
+            } else {
+                next(); // Skip if we already have this info.
+            }
+        },
+        function (session, results, next) {
+            
+
+                if (results.response) {
+                    session.conversationData["username"] = results.response;
+                }
+
+                session.send("Retrieving your favourite movies");
+                movie.displayFavouriteMovie(session, session.conversationData["username"]);  // <---- THIS LINE HERE IS WHAT WE NEED 
+            
+        }
+    ]).triggerAction({
+        matches: 'GetFavouriteMovie'
+    });
+
+    bot.dialog('AddFavouriteMovie', [
+        function (session, args, next) {
+            session.dialogData.args = args || {};        
+            if (!session.conversationData["username"]) {
+                builder.Prompts.text(session, "Enter a username to setup your account.");                
+            } else {
+                next(); // Skip if we already have this info.
+            }
+        },
+        function (session, results, next) {
+            
+
+                if (results.response) {
+                    session.conversationData["username"] = results.response;
+                }
+                // Pulls out the food entity from the session if it exists
+                var movieEntity = builder.EntityRecognizer.findEntity(session.dialogData.args.intent.entities, 'movie');
+    
+                // Checks if the food entity was found
+                if (movieEntity) {
+                    session.send('Thanks for telling me that \'%s\' is your favourite movie', movieEntity.entity);
+                    movie.sendFavouriteMovie(session, session.conversationData["username"], movieEntity.entity); // <-- LINE WE WANT
+    
+                } else {
+                    session.send("No movie identified!!!");
+                }
+            
+        }
+    ]).triggerAction({
+        matches: 'AddFavouriteMovie'
     });
 }
